@@ -1,0 +1,2 @@
+[console_scripts]
+sso-auth = sso_auth.core:cli_main

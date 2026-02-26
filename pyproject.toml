@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sso-auth"
+version = "0.1.1"
+description = "Programmatic SSO Keycloak authentication helper for sso.bps.go.id"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "requests",
+    "beautifulsoup4",
+]
+
+[project.scripts]
+sso-auth = "sso_auth.core:cli_main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

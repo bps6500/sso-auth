@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/sso_auth/__init__.py
+src/sso_auth/__main__.py
+src/sso_auth/core.py
+src/sso_auth.egg-info/PKG-INFO
+src/sso_auth.egg-info/SOURCES.txt
+src/sso_auth.egg-info/dependency_links.txt
+src/sso_auth.egg-info/entry_points.txt
+src/sso_auth.egg-info/requires.txt
+src/sso_auth.egg-info/top_level.txt
