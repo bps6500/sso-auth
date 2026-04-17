@@ -1,39 +1,52 @@
 # sso-auth
 
-Python package untuk autentikasi SSO Keycloak (`sso.bps.go.id`) secara programatis.
+Python SDK + CLI untuk autentikasi SSO Keycloak (`sso.bps.go.id`) yang siap diintegrasikan ke aplikasi automation/monitoring internal.
 
-## Install dari wheel/sdist
-
-Build artifact:
+## Install
 
 ```bash
-python -m build
+pip install -e .
 ```
 
-Hasil build ada di folder `dist/`:
-
-- `dist/sso_auth-<version>-py3-none-any.whl`
-- `dist/sso_auth-<version>.tar.gz`
-
-Install di project lain:
+Untuk development:
 
 ```bash
-pip install /path/ke/dist/sso_auth-<version>-py3-none-any.whl
+pip install -e ".[dev]"
 ```
 
-## Penggunaan
+## CLI
 
-Sebagai library:
+```bash
+sso-auth login <username>
+sso-auth status <username>
+sso-auth whoami <username>
+sso-auth token <username>
+sso-auth refresh <username>
+sso-auth logout <username>
+```
+
+## Penggunaan SDK
 
 ```python
-from sso_auth import authenticate
+from sso_auth import SsoClient
 
-result = authenticate("username", "password")
-print(result)
+client = SsoClient.from_keyring("your_username")
+client.ensure_valid()
+
+token = client.access_token
+session = client.session
+resp = session.get("https://internal-app.example/api")
 ```
 
-Sebagai CLI:
+## Integrasi ke aplikasi lain
 
-```bash
-sso-auth
-```
+- Gunakan `SsoClient` sebagai dependency tunggal untuk auth state
+- Pakai `client.ensure_valid()` sebelum request agar auto-refresh
+- Reuse `client.session` untuk HTTP client aplikasi adapter Anda
+- Gunakan `client.on_token_refresh(callback)` jika perlu sinkronisasi token/cookie
+
+## Keamanan
+
+- Password + refresh token disimpan di OS keyring
+- Metadata non-rahasia disimpan di `~/.config/sso-auth/state.json`
+- Jangan commit token file ke repository
