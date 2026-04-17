@@ -1,2 +1,13 @@
 requests
 beautifulsoup4
+pydantic>=2
+pydantic-settings
+keyring
+typer
+rich
+
+[dev]
+pytest
+responses
+ruff
+mypy

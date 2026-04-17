@@ -4,17 +4,30 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sso-auth"
-version = "0.1.1"
+version = "0.2.0"
 description = "Programmatic SSO Keycloak authentication helper for sso.bps.go.id"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "requests",
     "beautifulsoup4",
+    "pydantic>=2",
+    "pydantic-settings",
+    "keyring",
+    "typer",
+    "rich",
 ]
 
 [project.scripts]
-sso-auth = "sso_auth.core:cli_main"
+sso-auth = "sso_auth.cli:run"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "responses",
+    "ruff",
+    "mypy",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

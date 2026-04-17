@@ -1,5 +1,5 @@
-from .core import cli_main
+from .cli import run
 
 
 if __name__ == "__main__":
-    cli_main()
+    run()
