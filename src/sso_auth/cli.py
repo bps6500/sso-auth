@@ -12,6 +12,8 @@ from sso_auth.client import SsoClient
 from sso_auth.logging import setup_default_logging
 
 app = typer.Typer(help="SSO authentication helper for sso.bps.go.id")
+browser_app = typer.Typer(help="Browser automation commands (requires sso-auth[browser]).")
+app.add_typer(browser_app, name="browser")
 console = Console()
 
 
@@ -74,6 +76,48 @@ def status(username: str) -> None:
         return
     expiring = client.user_info is not None and client.access_token != ""
     console.print(f"Status: authenticated (token_present={expiring})")
+
+
+@browser_app.command("open")
+def browser_open(
+    app_url: str,
+    username: str,
+    headful: bool = typer.Option(False, "--headful", help="Show browser window."),
+) -> None:
+    """Open an authenticated browser session.
+
+    Navigates to APP_URL as USERNAME, performing SSO login if needed.
+    Useful for verifying access manually or generating a fresh storage_state.
+    """
+    try:
+        from sso_auth.browser.session import BrowserSession
+    except ImportError:
+        console.print(
+            "[red]Browser extras not installed.[/red]\n"
+            "Run: pip install sso-auth[browser] && playwright install chromium"
+        )
+        raise typer.Exit(code=1)
+
+    client = _build_client(username)
+    with BrowserSession.launch(client, app_url=app_url, headless=not headful) as b:
+        console.print(f"[green]Opened[/green] {b.page.url}")
+        if not headful:
+            b.screenshot("/tmp/sso_browser_open.png")
+            console.print("Screenshot saved to /tmp/sso_browser_open.png")
+
+
+@browser_app.command("clear")
+def browser_clear(username: str) -> None:
+    """Delete the saved browser storage_state for USERNAME.
+
+    Forces a fresh login the next time a BrowserSession is launched.
+    """
+    client = _build_client(username)
+    from sso_auth.browser.storage import clear_storage, default_storage_path
+
+    path = default_storage_path(client.settings)
+    clear_storage(path)
+    console.print(f"Cleared storage_state for {username} ({path})")
 
 
 def run() -> None:

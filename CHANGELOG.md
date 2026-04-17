@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.0] - 2026-04-17
+
+### Added
+
+- Added `sso_auth.browser` optional module for headless Playwright automation.
+- `BrowserSession`: sync context manager that handles launch, smart hybrid login, stealth patches, and storage_state persistence.
+- Smart hybrid login: injects existing storage_state first, falls back to auto-UI login via Keycloak form when session expires.
+- `stealth.apply_patches()`: lightweight JS init patches to remove `navigator.webdriver` and align browser fingerprint.
+- `HumanBehavior`: configurable random delay and per-character typing helpers.
+- `scraping` helpers: `download_to`, `extract_table`, `wait_any`.
+- CLI subcommands `sso-auth browser open` and `sso-auth browser clear`.
+- Unit tests for human behavior, login branching, and storage round-trip.
+
+### Changed
+
+- Bumped version to `0.3.0`.
+- Playwright added as optional dependency (`pip install sso-auth[browser]`).
+
 ## [0.2.0] - 2026-04-17
 
 ### Added

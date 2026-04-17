@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sso-auth"
-version = "0.2.0"
+version = "0.3.0"
 description = "Programmatic SSO Keycloak authentication helper for sso.bps.go.id"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -27,6 +27,9 @@ dev = [
     "responses",
     "ruff",
     "mypy",
+]
+browser = [
+    "playwright>=1.44",
 ]
 
 [tool.setuptools]
